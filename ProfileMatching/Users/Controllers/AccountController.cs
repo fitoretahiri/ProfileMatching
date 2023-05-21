@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using ProfileMatching.Models;
 using ProfileMatching.Models.DTOs;
 using ProfileMatching.Users.Interfaces;
@@ -28,22 +29,52 @@ namespace ProfileMatching.Users.Controllers
             _signInManager = signInManager;
             _tokenService = tokenService;
         }
+
         [HttpPost("login")]
         public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDto)
         {
-            var user = await _userManager.FindByEmailAsync(loginDto.Email);
-
-            if (user == null) return Unauthorized();
-
-            var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
-
-            if (result.Succeeded)
+            try
             {
-                return CreateUserObject(user);
-            };
+                var user = await _userManager.FindByEmailAsync(loginDto.Email);
 
-            return Unauthorized();
+                if (user == null) return Unauthorized();
+
+                var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+                if (result.Succeeded)
+                {
+                    return CreateUserObject(user);
+                };
+
+                return Unauthorized();
+            }
+            catch (Exception ex)
+            {
+                // Log the exception details
+                //logger.LogError(ex, "An error occurred during login");
+                
+
+                // Return an appropriate error response
+                Console.WriteLine(ex.Message);
+                return Unauthorized();
+                
+            }
         }
+        /*  public async Task<ActionResult<UserDTO>> Login(LoginDTO loginDto)
+          {
+              var user = await _userManager.FindByEmailAsync(loginDto.Email);
+
+              if (user == null) return Unauthorized();
+
+              var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
+
+              if (result.Succeeded)
+              {
+                  return CreateUserObject(user);
+              };
+
+              return Unauthorized();
+          }*/
         [HttpPost("register")]
         public async Task<ActionResult<UserDTO>> Register(RegisterDTO registerDto)
         {

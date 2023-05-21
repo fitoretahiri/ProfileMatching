@@ -175,7 +175,7 @@ export default observer(function ResponsiveAppBar() {
                   </MenuItem>
                 ) : (
                   <MenuItem onClick={handleCloseUserMenu}>
-                    <Typography textAlign="center" onClick={() => navigate('/applications')}>
+                    <Typography id="applications" textAlign="center" onClick={() => navigate('/applications')}>
                       Applications
                     </Typography>
                   </MenuItem>

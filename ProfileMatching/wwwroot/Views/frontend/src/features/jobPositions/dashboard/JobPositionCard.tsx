@@ -33,7 +33,7 @@ export default function JobPositionCard({ jobPosition, handleApply, path }: Prop
               <>Skadon më: {jobPosition.expiryDate}</>
             </Typography>
             <Box sx={{ mt: 2 }}>
-              <Button
+              <Button id="butoni"
                 variant="contained"
                 onClick={() => {
                   handleApply(jobPosition.id);
